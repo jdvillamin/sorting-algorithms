@@ -3,10 +3,10 @@
 #include <time.h>
 
 void swap(int *a, int *b) {
-	int temp;
-	temp = *a;
-	*a = *b;
-	*b = temp;
+	if (*a == *b) return;
+	*a ^= *b;
+	*b ^= *a;
+	*a ^= *b;
 }
 
 void init(int a[], int n) {
