@@ -4,6 +4,7 @@ for file in *.c; do
 	filename=${file%.c}
 	gcc -o $filename.elf $file
 	echo running $file...
-	./$filename.elf
+	./$filename.elf $1
 done
 rm *.elf
+

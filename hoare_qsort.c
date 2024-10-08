@@ -4,9 +4,9 @@
 
 void swap(int *a, int *b) {
 	if (*a == *b) return;
-	*a = *a ^ *b;
-	*b = *a ^ *b;
-	*a = *a ^ *b;
+	*a ^= *b;
+	*b ^= *a;
+	*a ^= *b;
 }
 
 void init(int a[], int n) {
@@ -93,9 +93,9 @@ void check(int a[], int n) {
 	printf("correct: %d\n", correct);
 }
 
-int main() {
-	int n = 40000;
-	int a[n], i;
+int main(int argc, char *argv[]) {
+	int n = atoi(argv[1]);
+	int a[n];
 	clock_t t1, t2;
 
 	init(a, n);

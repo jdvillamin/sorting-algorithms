@@ -67,9 +67,9 @@ void check(int a[], int n) {
 	printf("correct: %d\n", correct);
 }
 
-int main() {
-        int n = 40000;
-        int a[n], i;
+int main(int argc, char *argv[]) {
+        int n = atoi(argv[1]);
+        int a[n];
         clock_t t1, t2;
 
         init(a, n);
