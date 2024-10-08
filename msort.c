@@ -68,7 +68,7 @@ void check(int a[], int n) {
 }
 
 int main() {
-        int n = 100000;
+        int n = 40000;
         int a[n], i;
         clock_t t1, t2;
 

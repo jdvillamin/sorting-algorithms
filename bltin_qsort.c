@@ -2,17 +2,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-/*
- * Let a0, b0 be the initial values of a and b.
- * a1 = a0 XOR b0
- * b1 = a1 XOR b0 = a0 XOR b0 XOR b0 = a0
- * a2 = a1 XOR b1 = a0 XOR b0 XOR a0 = b0
- */
 void swap(int *a, int *b) {
 	if (*a == *b) return;
-	*a = *a ^ *b;
-	*b = *a ^ *b;
-	*a = *a ^ *b;
+	*a ^= *b;
+	*b ^= *a;
+	*a ^= *b;
 }
 
 void init(int a[], int n) {
@@ -48,9 +42,6 @@ void output(int a[], int n) {
 	printf("\n");
 }
 
-/*
- * Function to check if the resulting array is correctly sorted.
- */
 void check(int a[], int n) {
 	int i, correct = 1;
 
@@ -63,8 +54,7 @@ int compare(const void *a, const void *b) {
 }
 
 int main() {
-	// int n = 5;
-	int n = 100000;
+	int n = 40000;
 	int a[n], i;
 	clock_t t1, t2;
 

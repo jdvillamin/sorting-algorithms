@@ -2,12 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-/*
- * Let a0, b0 be the initial values of a and b.
- * a1 = a0 XOR b0
- * b1 = a1 XOR b0 = a0 XOR b0 XOR b0 = a0
- * a2 = a1 XOR b1 = a0 XOR b0 XOR a0 = b0
- */
 void swap(int *a, int *b) {
 	if (*a == *b) return;
 	*a = *a ^ *b;
@@ -72,7 +66,7 @@ void check(int a[], int n) {
 }
 
 int main() {
-	int n = 100000;
+	int n = 40000;
 	int a[n], i;
 	clock_t t1, t2;
 
