@@ -1,6 +1,6 @@
 # Array Sorting Program
 
-This project contains scripts that compiles and runs a C program.
+This project contains scripts that compile and run a C program.
 
 ## Files
 
@@ -20,4 +20,3 @@ To compile and run the program, use the scripts as follows:
 ./run3x.sh <arraysize>
 ./runall.sh <filename> <arraysize>
 ./runall3x.sh <arraysize>
-
