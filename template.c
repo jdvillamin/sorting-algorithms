@@ -4,9 +4,7 @@
 #include <time.h>
 #include "utils.h"
 
-int compare(const void *a, const void *b) {
-	return *(int*)a - *(int*)b;
-}
+// implement sorting algorithm here
 
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
@@ -24,7 +22,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	qsort(a, n, sizeof(int), compare);
+	// call sorting algorithm here
 	t2 = clock();
 
 	check(a, n);

@@ -6,8 +6,6 @@ This project contains scripts that compile and run a C program.
 
 - `run.sh`: Script to compile and run the C program.
 - `run3x.sh`: Script to compile and run the C program three times.
-- `runall.sh`: Script to compile and run all C programs.
-- `runall3x.sh`: Script to compile and run all C programs three times.
 
 ## How to Use
 
@@ -16,7 +14,10 @@ This project contains scripts that compile and run a C program.
 To compile and run the program, use the scripts as follows:
 
 ```bash
-./run.sh <filename> <arraysize>
-./run3x.sh <arraysize>
-./runall.sh <filename> <arraysize>
-./runall3x.sh <arraysize>
+./run.sh <filename> <arraysize> asc
+./run.sh <filename> <arraysize> desc
+./run.sh <filename> <arraysize> rand <seed> 
+./run3x.sh <filename> <arraysize> asc
+./run3x.sh <filename> <arraysize> desc
+./run3x.sh <filename> <arraysize> rand <seed>
+
