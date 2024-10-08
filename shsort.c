@@ -2,11 +2,17 @@
 #include <stdlib.h>
 #include <time.h>
 
+/*
+ * Let a0, b0 be the initial values of a and b.
+ * a1 = a0 XOR b0
+ * b1 = a1 XOR b0 = a0 XOR b0 XOR b0 = a0
+ * a2 = a1 XOR b1 = a0 XOR b0 XOR a0 = b0
+ */
 void swap(int *a, int *b) {
-	int temp;
-	temp = *a;
-	*a = *b;
-	*b = temp;
+	if (*a == *b) return;
+	*a = *a ^ *b;
+	*b = *a ^ *b;
+	*a = *a ^ *b;
 }
 
 void init(int a[], int n) {
@@ -14,17 +20,17 @@ void init(int a[], int n) {
 
 	// ascending
 	// for (i = 0; i < n; i++)
-	//	a[i] = i + 1;
-
+	// 	a[i] = i + 1;
+	
 	// descending
 	// for (i = 0; i < n; i++)
-	 	// a[i] = n - i;
-
+	// 	a[i] = n - i;
+	
 	// random
 	// initialize array a
 	for (i = 0; i < n; i++)
-		 a[i] = i + 1;
-
+	 	a[i] = i + 1;
+	
 	// set seed
 	srand(7);
 	// srand(13);
@@ -34,14 +40,20 @@ void init(int a[], int n) {
 	 	swap(&a[i], &a[rand() % n]);
 }
 
-void isort(int a[], int n) {
-	int i, j;
-
-	for (i = 1; i < n; i++)
-		for (j = i; j > 0; j--)
-			if (a[j - 1] > a[j])
-				swap(&a[j - 1], &a[j]);
-			else break;
+/*
+ * Use insertion sort, but preprocess with larger gaps.
+ * Note that gap = 1 means normal insertion sort.
+ * But due to preprocessing before gap = 1, we reduce the number of iterations of this normal insertion sort.
+ * This is to take inversion pairs that are very far from each other.
+ */
+void shsort(int a[], int n) {
+	for (int gap = n / 2; gap > 0; gap /= 2)
+		for (int i = gap; i < n; i++)
+			for (int j = i; j >= gap; j -= gap)
+				if (a[j] < a[j - gap])
+					swap(&a[j], &a[j - gap]);
+				else
+					break;
 }
 
 void output(int a[], int n) {
@@ -68,7 +80,7 @@ int main() {
 	// output(a, n);
 
 	t1 = clock();
-	isort(a, n);
+	shsort(a, n);
 	t2 = clock();
 
 	// output(a, n);
