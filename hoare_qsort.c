@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include "utils.h"
+#include "brute.h"
 
 /*
  * Hoare partition scheme: https://en.wikipedia.org/wiki/Quicksort#Hoare_partition_scheme
@@ -17,12 +18,11 @@
  * Otherwise, we know that j is the partition position.
  */
 int partition(int a[], int l, int h) {
-	int random_index = l + rand() % (h - l);
-	swap(&a[l], &a[random_index]);
+	swap(&a[l], &a[l + rand() % (h - l)]);
 	int pivot = a[l], i = l, j = h - 1;
 	while (1) {
-		while (i < h && a[i] < pivot) i++;
-		while (j > l && a[j] > pivot) j--;
+		while (a[i] < pivot) i++;
+		while (a[j] > pivot) j--;
 		if (i >= j) break;
 		swap(&a[i], &a[j]);
 	}
@@ -48,11 +48,17 @@ void quick_sort(int a[], int l, int h) {
 	quick_sort(a, p + 1, h);
 }
 
+void hoare_qsort(int a[], int n) {
+	quick_sort(a, 0, n);
+}
+
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
 		printf("wrong usage\n");
 		return 1;
 	}
+
+	printf("brute result: %d\n", brute(hoare_qsort, 10));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -64,10 +70,10 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	quick_sort(a, 0, n);
+	hoare_qsort(a, n);
 	t2 = clock();
 
-	check(a, n);
+	printf("correct: %d\n", check(a, n));
 	printf("time elapsed: %0.6f\n", (double) (t2 - t1) / CLOCKS_PER_SEC);
 
 	return 0;

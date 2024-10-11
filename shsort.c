@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include "utils.h"
+#include "brute.h"
 
 /*
  * Use insertion sort, but preprocess with larger gaps.
@@ -26,6 +27,8 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	printf("brute result: %d\n", brute(shsort, 10));
+
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
 	int seed = (argc > 3) ? atoi(argv[3]) : 0;
@@ -39,7 +42,7 @@ int main(int argc, char *argv[]) {
 	shsort(a, n);
 	t2 = clock();
 
-	check(a, n);
+	printf("correct: %d\n", check(a, n));
 	printf("time elapsed: %0.6f\n", (double) (t2 - t1) / CLOCKS_PER_SEC);
 
 	return 0;

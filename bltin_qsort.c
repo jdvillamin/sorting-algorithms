@@ -3,9 +3,14 @@
 #include <string.h>
 #include <time.h>
 #include "utils.h"
+#include "brute.h"
 
 int compare(const void *a, const void *b) {
 	return *(int*)a - *(int*)b;
+}
+
+void bltin_qsort(int a[], int n) {
+	qsort(a, n, sizeof(int), compare);
 }
 
 int main(int argc, char *argv[]) {
@@ -13,6 +18,8 @@ int main(int argc, char *argv[]) {
 		printf("wrong usage\n");
 		return 1;
 	}
+
+	printf("brute result: %d\n", brute(bltin_qsort, 10));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -24,10 +31,10 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	qsort(a, n, sizeof(int), compare);
+	bltin_qsort(a, n);
 	t2 = clock();
 
-	check(a, n);
+	printf("correct: %d\n", check(a, n));
 	printf("time elapsed: %0.6f\n", (double) (t2 - t1) / CLOCKS_PER_SEC);
 
 	return 0;

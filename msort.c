@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include "utils.h"
+#include "brute.h"
 
 void merge(int a[], int n) {
 	int i, j, k, mid = n / 2, temp[n];
@@ -26,6 +27,8 @@ int main(int argc, char *argv[]) {
 		printf("wrong usage\n");
 		return 1;
 	}
+	
+	printf("brute result: %d\n", brute(msort, 10));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -40,7 +43,7 @@ int main(int argc, char *argv[]) {
 	msort(a, n);
 	t2 = clock();
 
-	check(a, n);
+	printf("correct: %d\n", check(a, n));
 	printf("time elapsed: %0.6f\n", (double) (t2 - t1) / CLOCKS_PER_SEC);
 
 	return 0;

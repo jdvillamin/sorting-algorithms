@@ -3,6 +3,10 @@
 #include <string.h>
 #include "utils.h"
 
+int min(int a, int b) {
+	return a < b ? a : b;
+}
+
 void swap(int *a, int *b) {
 	int temp = *a;
 	*a = *b;
@@ -38,11 +42,11 @@ void output(int a[], int n) {
     	printf("\n");
 }
 
-void check(int a[], int n) {
+int check(int a[], int n) {
 	int correct = 1;
 
 	for (int i = 0; i + 1 < n; i++)
         	correct &= a[i] <= a[i + 1];
-    	printf("correct: %d\n", correct);
+	return correct;
 }
 

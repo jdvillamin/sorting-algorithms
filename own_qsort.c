@@ -3,32 +3,30 @@
 #include <string.h>
 #include <time.h>
 #include "utils.h"
+#include "brute.h"
 
 /*
  * Partition algorithm:
  * Note that all elements that is less than a[p] must be to its left.
  * Thus, these elements must form a prefix of a[l:h].
  * The idea is to build this prefix.
- * Suppose we pick the first element as the pivot.
+ * Suppose we pick the last element as the pivot.
  * To avoid corner cases, we swap it with a random element in the subrange.
- * Maintain a pointer i starting from l + 1.
- * Maintain another pointer j starting from l.
- * Scan all elements a[j] until j = h.
- * If a[j] < pivot, then swap a[i] and a[j].
- * Increment i.
+ * To build the prefix, maintain two pointers i, j.
+ * i keeps track of the last element in the prefix.
+ * j moves to swap elements less than pivot to the last element of the prefix.
  */
 int partition(int a[], int l, int h) {
-	int random_index = l + rand() % (h - l);
-	swap(&a[l], &a[random_index]);
-	int pivot = a[l], i = l + 1;
-	for (int j = l; j < h; j++) {
+	swap(&a[h - 1], &a[l + rand() % (h - l)]);
+	int pivot = a[h - 1], i = l, j;
+	for (j = l; j < h - 1; j++) {
 		if (a[j] < pivot) {
 			swap(&a[i], &a[j]);
 			i++;
 		}
 	}
-	swap(&a[l], &a[i - 1]);
-	return i - 1;
+	swap(&a[h - 1], &a[i]);
+	return i;
 }
 
 /*
@@ -50,11 +48,17 @@ void quick_sort(int a[], int l, int h) {
 	quick_sort(a, p + 1, h);
 }
 
+void own_qsort(int a[], int n) {
+	quick_sort(a, 0, n);
+}
+
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
 		printf("wrong usage\n");
 		return 1;
 	}
+
+	printf("brute result: %d\n", brute(own_qsort, 10));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -66,10 +70,10 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	quick_sort(a, 0, n);
+	own_qsort(a, n);
 	t2 = clock();
 
-	check(a, n);
+	printf("correct: %d\n", check(a, n));
 	printf("time elapsed: %0.6f\n", (double) (t2 - t1) / CLOCKS_PER_SEC);
 
 	return 0;
