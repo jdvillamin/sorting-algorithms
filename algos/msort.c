@@ -9,7 +9,7 @@ void merge(int a[], int n) {
 	int i, j, k, mid = n / 2, temp[n];
 
 	for (i = 0, j = mid, k = 0; k < n; k++)
-		temp[k] = (j >= n || i < mid && a[i] < a[j]) ? a[i++] : a[j++];
+		temp[k] = (j == n || i < mid && a[i] < a[j]) ? a[i++] : a[j++];
 	
 	memcpy(a, temp, n * sizeof(int));
 }
