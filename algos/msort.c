@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "utils.h"
-#include "brute.h"
+#include "../lib/utils.h"
+#include "../lib/brute.h"
 
 void merge(int a[], int n) {
 	int i, j, k, mid = n / 2, temp[n];

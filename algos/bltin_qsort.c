@@ -2,10 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "utils.h"
-#include "brute.h"
+#include "../lib/utils.h"
+#include "../lib/brute.h"
 
-// implement sorting algorithm here
+int compare(const void *a, const void *b) {
+	return *(int*)a - *(int*)b;
+}
+
+void bltin_qsort(int a[], int n) {
+	qsort(a, n, sizeof(int), compare);
+}
 
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
@@ -13,7 +19,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	// printf("brute result: %d\n", brute(/*sort function*/, 10));
+	printf("brute result: %d\n", brute(bltin_qsort, 10));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -25,7 +31,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	// call sorting algorithm here
+	bltin_qsort(a, n);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

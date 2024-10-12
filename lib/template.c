@@ -2,30 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "utils.h"
-#include "brute.h"
+#include "../lib/utils.h"
+#include "../lib/brute.h"
 
-void isort(int a[], int n) {
-	int i, j;
-
-	for (i = 1; i < n; i++)
-		for (j = i; j > 0; j--)
-			if (a[j - 1] > a[j])
-				swap(&a[j - 1], &a[j]);
-			else break;
-}
+// implement sorting algorithm here
 
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
 		printf("wrong usage\n");
 		return 1;
 	}
-	
-	printf("brute result: %d\n", brute(isort, 10));
-	
+
+	// printf("brute result: %d\n", brute(/*sort function*/, 10));
+
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
-	int seed = (argc == 4) ? atoi(argv[3]) : 0;
+	int seed = (argc > 3) ? atoi(argv[3]) : 0;
 
 	int a[n];
 	clock_t t1, t2;
@@ -33,7 +25,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	isort(a, n);
+	// call sorting algorithm here
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

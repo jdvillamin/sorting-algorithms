@@ -2,15 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "utils.h"
-#include "brute.h"
+#include "../lib/utils.h"
+#include "../lib/brute.h"
 
-int compare(const void *a, const void *b) {
-	return *(int*)a - *(int*)b;
-}
+void isort(int a[], int n) {
+	int i, j;
 
-void bltin_qsort(int a[], int n) {
-	qsort(a, n, sizeof(int), compare);
+	for (i = 1; i < n; i++)
+		for (j = i; j > 0; j--)
+			if (a[j - 1] > a[j])
+				swap(&a[j - 1], &a[j]);
+			else break;
 }
 
 int main(int argc, char *argv[]) {
@@ -18,12 +20,12 @@ int main(int argc, char *argv[]) {
 		printf("wrong usage\n");
 		return 1;
 	}
-
-	printf("brute result: %d\n", brute(bltin_qsort, 10));
-
+	
+	printf("brute result: %d\n", brute(isort, 10));
+	
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
-	int seed = (argc > 3) ? atoi(argv[3]) : 0;
+	int seed = (argc == 4) ? atoi(argv[3]) : 0;
 
 	int a[n];
 	clock_t t1, t2;
@@ -31,7 +33,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	bltin_qsort(a, n);
+	isort(a, n);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

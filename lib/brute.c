@@ -3,10 +3,11 @@
 #include "utils.h"
 
 int next_permutation(int a[], int n) {
+	int i, p, q;
 	// find the maximum p such that a[p] < a[p + 1]
 	// if p doesn't exist, then this is the last permutation
-	int p = -1; // -1 means it doesn't exist
-	for (int i = n - 2; i >= 0; i--) {
+	p = -1; // -1 means it doesn't exist
+	for (i = n - 2; i >= 0; i--) {
 		if (a[i] < a[i + 1]) {
 			p = i;
 			break;
@@ -14,8 +15,8 @@ int next_permutation(int a[], int n) {
 	}
 	if (p == -1) return 0; // 0 means no more next permutation
 	// find the maximum q such that p < q and a[p] < a[q]
-	int q = p + 1; // q should always exist
-	for (int i = n - 1; i > p + 1; i--) {
+	q = p + 1; // q should always exist
+	for (i = n - 1; i > p + 1; i--) {
 		if (a[p] < a[i]) {
 			q = i;
 			break;
@@ -23,27 +24,27 @@ int next_permutation(int a[], int n) {
 	}
 	swap(&a[p], &a[q]);
 	// reverse a[p + 1:q]
-	for (int i = p + 1; i < p + 1 + (q - p) / 2; i++) {
+	for (i = p + 1; i < p + 1 + (q - p) / 2; i++) {
 		swap(&a[i], &a[q - (i - p - 1)]);
 	}
 	return 1;
 }
 
 int brute(void (*sort)(int *, int), int max_n) {
-	int a[max_n], p[max_n];
-	for (int n = 1; n <= max_n; n++) {
-		for (int i = 0; i < n; i++) {
+	int a[max_n], p[max_n], n, i;
+	for (n = 1; n <= max_n; n++) {
+		for (i = 0; i < n; i++) {
 			a[i] = i + 1;
 		}
 		do {
-			for (int i = 0; i < n; i++) {
+			for (i = 0; i < n; i++) {
 				p[i] = a[i];
 			}
 			(*sort)(p, n);
 			if (!check(p, n)) {
 				fprintf(stderr, "error: wrong sort\n");
 				fprintf(stderr, "permutation:\n");
-				for (int i = 0; i < n; i++) fprintf(stderr, "%d ", p[i]);
+				for (i = 0; i < n; i++) fprintf(stderr, "%d ", p[i]);
 				fprintf(stderr, "\n");
 				return 0;
 			}		
