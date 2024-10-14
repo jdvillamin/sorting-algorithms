@@ -5,6 +5,57 @@
 #include "../lib/utils.h"
 #include "../lib/brute.h"
 
+/*
+ * [                        ]
+ * 
+ * [sorted][    unsorted    ]
+ *
+ * We insert elements from the unsorted part to the sorted part.
+ *
+ * We build the sorted part expanding from left to right.
+ *
+ * [  sorted  ][  unsorted  ]
+ *
+ * [         sorted         ]
+ *
+ * 3 1 4 2 5 6 0 8 7
+ *
+ * [3] 1 4 2 5 6 0 8 7
+ *
+ * We can pick the first element in the unsorted part.
+ *
+ * Swap it with the element to its left until we get swap it to the correct position.
+ *
+ * This takes advantage of the fact that the sorted part is sorted.
+ *
+ * [1] 3 4 2 5 6 0 8 7
+ *
+ * [1 3] 4 2 5 6 0 8 7
+ *
+ * [1 3 4] 2 5 6 0 8 7
+ *
+ * [1 3 2] 4 5 6 0 8 7
+ *
+ * [1 2 3 4] 5 6 0 8 7
+ *
+ * [1 2 3 4 5 6] 0 8 7
+ *
+ * [1 2 3 4 5 0] 6 8 7
+ *
+ * [1 2 3 4 0 5] 6 8 7
+ *
+ * [1 2 3 0 4 5] 6 8 7
+ *
+ * ...
+ * 
+ * [0 1 2 3 4 5 6] 8 7
+ *
+ * [0 1 2 3 4 5 6 8] 7
+ *
+ * [0 1 2 3 4 5 6 7 8]
+ * 
+ * The insertion point must be the right most position such that the previos element is less than or equal to the inserted element.
+ */
 void isort(int a[], int n) {
 	int i, j;
 

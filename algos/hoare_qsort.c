@@ -18,8 +18,8 @@
  * Otherwise, we know that j is the partition position.
  */
 int partition(int a[], int l, int h) {
-	swap(&a[l], &a[l + rand() % (h - l)]);
-	int pivot = a[l], i = l, j = h - 1;
+	swap(&a[l], &a[l + rand() % (h - l + 1)]);
+	int pivot = a[l], i = l, j = h;
 	while (1) {
 		while (a[i] < pivot) i++;
 		while (a[j] > pivot) j--;
@@ -41,15 +41,15 @@ int partition(int a[], int l, int h) {
  * then by Master's theorem, our algorithm will be O(n log n)
  * if we get lucky with the partitioning element that it halves the subranges.
  */
-void quick_sort(int a[], int l, int h) {
-	if (h - l < 2) return;
+void hoare_qsort_helper(int a[], int l, int h) {
+	if (l >= h) return;
 	int p = partition(a, l, h);
-	quick_sort(a, l, p);
-	quick_sort(a, p + 1, h);
+	hoare_qsort_helper(a, l, p - 1);
+	hoare_qsort_helper(a, p + 1, h);
 }
 
 void hoare_qsort(int a[], int n) {
-	quick_sort(a, 0, n);
+	hoare_qsort_helper(a, 0, n - 1);
 }
 
 int main(int argc, char *argv[]) {

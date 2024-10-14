@@ -17,15 +17,15 @@
  * j moves to swap elements less than pivot to the last element of the prefix.
  */
 int partition(int a[], int l, int h) {
-	swap(&a[h - 1], &a[l + rand() % (h - l)]);
-	int pivot = a[h - 1], i = l, j;
-	for (j = l; j < h - 1; j++) {
+	swap(&a[h], &a[l + rand() % (h - l + 1)]);
+	int pivot = a[h], i = l, j;
+	for (j = l; j < h; j++) {
 		if (a[j] < pivot) {
 			swap(&a[i], &a[j]);
 			i++;
 		}
 	}
-	swap(&a[h - 1], &a[i]);
+	swap(&a[h], &a[i]);
 	return i;
 }
 
@@ -41,15 +41,15 @@ int partition(int a[], int l, int h) {
  * then by Master's theorem, our algorithm will be O(n log n)
  * if we get lucky with the partitioning element that it halves the subranges.
  */
-void quick_sort(int a[], int l, int h) {
-	if (h - l < 2) return;
+void own_qsort_helper(int a[], int l, int h) {
+	if (l >= h) return;
 	int p = partition(a, l, h);
-	quick_sort(a, l, p);
-	quick_sort(a, p + 1, h);
+	own_qsort_helper(a, l, p - 1);
+	own_qsort_helper(a, p + 1, h);
 }
 
 void own_qsort(int a[], int n) {
-	quick_sort(a, 0, n);
+	own_qsort_helper(a, 0, n - 1);
 }
 
 int main(int argc, char *argv[]) {
