@@ -14,19 +14,15 @@ int next_permutation(int a[], int n) {
 		}
 	}
 	if (p == -1) return 0; // 0 means no more next permutation
-	// find the maximum q such that p < q and a[p] < a[q]
-	q = p + 1; // q should always exist
-	for (i = n - 1; i > p + 1; i--) {
-		if (a[p] < a[i]) {
-			q = i;
+	// find the maximum q such that a[p] < a[q] and swap them
+	for (i = n - 1; i > p; i--) {
+		if (a[i] > a[p]) {
+			swap(&a[i], &a[p]);
 			break;
 		}
 	}
-	swap(&a[p], &a[q]);
-	// reverse a[p + 1:q]
-	for (i = p + 1; i < p + 1 + (q - p) / 2; i++) {
-		swap(&a[i], &a[q - (i - p - 1)]);
-	}
+	// reverse a[p + 1:n - 1]
+	for (i = p + 1; i < n; i++) swap(&a[i], &a[n - 1 - (i - (p + 1))]);
 	return 1;
 }
 
