@@ -2,7 +2,34 @@
 
 This project contains various sorting algorithms implemented in C. Each are tested in terms clocks and with an ascending, descending, and random permutation of integers from `1` to `n`. 
 
-## Files
+## File Structure
+
+This project contains two subdirectories: `algos` and `lib`.
+
+### Algorithms
+
+The `algos` directory contains the C source codes for each sorting algorithm:
+
+- `bubble_sort.c`
+- `insertion_sort.c`
+- `selection_sort.c`
+- `shell_sort.c`
+- `heap_sort.c`
+- `own_quick_sort.c`
+- `hoare_quick_sort.c`
+- `built_in_quick_sort.c`
+
+### Library
+
+The `lib` directory contains header files and function implementation of common routines used to implement and test the sorting algorithms:
+
+- `template.c`: Template file can be copied in the `algos` directory to implement a new sorting algorithm.
+- `utils.h`: Header file that contains common utility functions for creating random permutations and implementing sorting algorithms.
+- `utils.c`: C file that implements the functions in `utils.h`.
+- `brute.h`: Header file that contains functions for generating all permutations of `1` to `n` in lexicographical order and brute force testing a sorting algorithm.
+- `brute.c`: C file that implements the functions in `brute.h`.
+
+## Scripts
 
 The project contains bash scripts to automatically compile and execute the sorting algorithms.
 
@@ -40,8 +67,8 @@ chmod +x <scriptfile>
 
 **Example:**
 
-To run insertion sort in the C program `isort.c` with a random array using `seed = 7` and an array size of `n = 10000`, use the scripts as follows:
+To run insertion sort in the C program `insertion_sort.c` with a random array using `seed = 7` and an array size of `n = 10000`, use the scripts as follows:
 
 ```bash
-./run.sh isort 10000 rand 7
+./run.sh insertion_sort 10000 rand 7
 ```

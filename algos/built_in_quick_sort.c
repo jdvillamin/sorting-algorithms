@@ -5,15 +5,12 @@
 #include "../lib/utils.h"
 #include "../lib/brute.h"
 
-void selsort(int a[], int n) {
-	int i, j, min_idx;
-	for (i = 0; i < n; i++) {
-		min_idx = i;
-		for (j = i + 1; j < n; j++)
-			if (a[j] < a[min_idx])
-				min_idx = j;
-		swap(&a[i], &a[min_idx]);
-	}
+int compare(const void *a, const void *b) {
+	return *(int*)a - *(int*)b;
+}
+
+void built_in_quick_sort(int a[], int n) {
+	qsort(a, n, sizeof(int), compare);
 }
 
 int main(int argc, char *argv[]) {
@@ -22,7 +19,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	printf("brute result: %d\n", brute(selsort, 10));
+	printf("brute result: %d\n", brute(built_in_quick_sort));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -34,7 +31,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	selsort(a, n);
+	built_in_quick_sort(a, n);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

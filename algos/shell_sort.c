@@ -11,7 +11,7 @@
  * But due to preprocessing before gap = 1, we reduce the number of iterations of this normal insertion sort.
  * This is to take inversion pairs that are very far from each other.
  */
-void shsort(int a[], int n) {
+void shell_sort(int a[], int n) {
 	for (int gap = n / 2; gap > 0; gap /= 2)
 		for (int i = gap; i < n; i++)
 			for (int j = i; j >= gap; j -= gap)
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	printf("brute result: %d\n", brute(shsort, 10));
+	printf("brute result: %d\n", brute(shell_sort));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	shsort(a, n);
+	shell_sort(a, n);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

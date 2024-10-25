@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	// printf("brute result: %d\n", brute(/*sort function*/, 10));
+	// printf("brute result: %d\n", brute(/*sort function*/));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];

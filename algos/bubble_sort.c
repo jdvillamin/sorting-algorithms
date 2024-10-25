@@ -5,12 +5,19 @@
 #include "../lib/utils.h"
 #include "../lib/brute.h"
 
-int compare(const void *a, const void *b) {
-	return *(int*)a - *(int*)b;
-}
-
-void bltin_qsort(int a[], int n) {
-	qsort(a, n, sizeof(int), compare);
+void bubble_sort(int a[], int n) {
+	int i, j, swapped;
+	for (i = 0; i + 1 < n; i++) {
+		swapped = 0;
+		for (j = 0; j + 1 < n - i; j++) {
+			if (a[j] > a[j + 1]) {
+				swap(&a[j], &a[j + 1]);
+				swapped = 1;
+			}
+		}
+		if (!swapped) 
+			break;
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -19,7 +26,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	printf("brute result: %d\n", brute(bltin_qsort, 10));
+	printf("brute result: %d\n", brute(bubble_sort));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -31,7 +38,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	bltin_qsort(a, n);
+	bubble_sort(a, n);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

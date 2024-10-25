@@ -5,17 +5,14 @@
 #include "../lib/utils.h"
 #include "../lib/brute.h"
 
-void bubsort(int a[], int n) {
-	int i, j, swapped;
-	for (i = 0; i + 1 < n; i++) {
-		swapped = 0;
-		for (j = 0; j + 1 < n - i; j++) {
-			if (a[j] > a[j + 1]) {
-				swap(&a[j], &a[j + 1]);
-				swapped = 1;
-			}
-		}
-		if (!swapped) break;
+void selection_sort(int a[], int n) {
+	int i, j, min_idx;
+	for (i = 0; i < n; i++) {
+		min_idx = i;
+		for (j = i + 1; j < n; j++)
+			if (a[j] < a[min_idx])
+				min_idx = j;
+		swap(&a[i], &a[min_idx]);
 	}
 }
 
@@ -25,7 +22,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	printf("brute result: %d\n", brute(bubsort, 10));
+	printf("brute result: %d\n", brute(selection_sort));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -37,7 +34,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	bubsort(a, n);
+	selection_sort(a, n);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "brute.h"
 #include "utils.h"
+
+#define MAX_N 8
 
 int next_permutation(int a[], int n) {
 	int i, p, q;
@@ -13,7 +16,8 @@ int next_permutation(int a[], int n) {
 			break;
 		}
 	}
-	if (p == -1) return 0; // 0 means no more next permutation
+	if (p == -1) 
+		return 0; // 0 means no more next permutation
 	// find the maximum q such that a[p] < a[q] and swap them
 	for (i = n - 1; i > p; i--) {
 		if (a[i] > a[p]) {
@@ -22,25 +26,29 @@ int next_permutation(int a[], int n) {
 		}
 	}
 	// reverse a[p + 1:n - 1]
-	for (i = p + 1; i < n; i++) swap(&a[i], &a[n - 1 - (i - (p + 1))]);
+	int start = p + 1, end = n - 1;
+	while (start < end) {
+		swap(&a[start], &a[end]);
+		start++;
+		end--;
+	}
 	return 1;
 }
 
-int brute(void (*sort)(int *, int), int max_n) {
-	int a[max_n], p[max_n], n, i;
-	for (n = 1; n <= max_n; n++) {
-		for (i = 0; i < n; i++) {
+int brute(void (*sort)(int *, int)) {
+	int a[MAX_N], p[MAX_N], n, i;
+	for (n = 1; n <= MAX_N; n++) {
+		for (i = 0; i < n; i++) 
 			a[i] = i + 1;
-		}
 		do {
-			for (i = 0; i < n; i++) {
+			for (i = 0; i < n; i++) 
 				p[i] = a[i];
-			}
 			(*sort)(p, n);
 			if (!check(p, n)) {
 				fprintf(stderr, "error: wrong sort\n");
 				fprintf(stderr, "permutation:\n");
-				for (i = 0; i < n; i++) fprintf(stderr, "%d ", p[i]);
+				for (i = 0; i < n; i++) 
+					fprintf(stderr, "%d ", p[i]);
 				fprintf(stderr, "\n");
 				return 0;
 			}		

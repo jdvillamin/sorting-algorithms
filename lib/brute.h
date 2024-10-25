@@ -1,6 +1,7 @@
 #ifndef BRUTE_H
 #define BRUTE_H
 
-int brute(void (*)(int *, int), int max_n);
+int next_permutation(int a[], int n);
+int brute(void (*)(int *, int));
 
 #endif

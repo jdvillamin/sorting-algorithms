@@ -56,14 +56,15 @@
  * 
  * The insertion point must be the right most position such that the previos element is less than or equal to the inserted element.
  */
-void isort(int a[], int n) {
+void insertion_sort(int a[], int n) {
 	int i, j;
 
 	for (i = 1; i < n; i++)
 		for (j = i; j > 0; j--)
 			if (a[j - 1] > a[j])
 				swap(&a[j - 1], &a[j]);
-			else break;
+			else 
+				break;
 }
 
 int main(int argc, char *argv[]) {
@@ -72,7 +73,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	
-	printf("brute result: %d\n", brute(isort, 10));
+	printf("brute result: %d\n", brute(insertion_sort));
 	
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -84,7 +85,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	isort(a, n);
+	insertion_sort(a, n);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

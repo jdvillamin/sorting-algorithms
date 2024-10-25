@@ -41,15 +41,15 @@ int partition(int a[], int l, int h) {
  * then by Master's theorem, our algorithm will be O(n log n)
  * if we get lucky with the partitioning element that it halves the subranges.
  */
-void own_qsort_helper(int a[], int l, int h) {
+void own_quick_sort_helper(int a[], int l, int h) {
 	if (l >= h) return;
 	int p = partition(a, l, h);
-	own_qsort_helper(a, l, p - 1);
-	own_qsort_helper(a, p + 1, h);
+	own_quick_sort_helper(a, l, p - 1);
+	own_quick_sort_helper(a, p + 1, h);
 }
 
-void own_qsort(int a[], int n) {
-	own_qsort_helper(a, 0, n - 1);
+void own_quick_sort(int a[], int n) {
+	own_quick_sort_helper(a, 0, n - 1);
 }
 
 int main(int argc, char *argv[]) {
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	printf("brute result: %d\n", brute(own_qsort, 10));
+	printf("brute result: %d\n", brute(own_quick_sort));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	own_qsort(a, n);
+	own_quick_sort(a, n);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

@@ -14,10 +14,10 @@ void merge(int a[], int n) {
 	memcpy(a, temp, n * sizeof(int));
 }
 
-void msort(int a[], int n) {
+void merge_sort(int a[], int n) {
 	if (n > 1) {
-		msort(a, n / 2);
-		msort(&a[n / 2], n - n / 2);
+		merge_sort(a, n / 2);
+		merge_sort(&a[n / 2], n - n / 2);
 		merge(a, n);
 	}
 }
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	
-	printf("brute result: %d\n", brute(msort, 10));
+	printf("brute result: %d\n", brute(merge_sort));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	msort(a, n);
+	merge_sort(a, n);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));
@@ -48,4 +48,5 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
+
 
