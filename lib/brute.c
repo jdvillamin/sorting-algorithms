@@ -57,6 +57,28 @@ int brute(void (*sort)(int *, int)) {
 	return 1;
 }
 
+int gen_brute(void (*gen_sort)(void *, int, int, int (*cmp)(const void *, const void *))) {
+	int a[MAX_N], p[MAX_N], n, i;
+	for (n = 1; n <= MAX_N; n++) {
+		for (i = 0; i < n; i++)
+			a[i] = i + 1;
+		do {
+			for (i = 0; i < n; i++)
+				p[i] = a[i];
+			(*gen_sort)(p, n, sizeof(int), cmp_int);
+			if (!check(p, n)) {
+				fprintf(stderr, "error: wrong sort\n");
+				fprintf(stderr, "permutation:\n");
+				for (i = 0; i < n; i++) 
+					fprintf(stderr, "%d ", p[i]);
+				fprintf(stderr, "\n");
+				return 0;
+			}
+		} while (next_permutation(a, n));
+	}
+	return 1;
+}
+
 /*
  * 1 4 5 8 9 2 3 7 6
  *

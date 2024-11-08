@@ -50,3 +50,14 @@ int check(int a[], int n) {
 	return correct;
 }
 
+int cmp_int(const void *p1, const void *p2) {
+	return ((*((int *) p1)) - (*((int *) p2)) > 0);
+}
+
+void gen_swap(const void *p1, const void *p2, int size) {
+	void *ptemp = (void *) malloc(size);
+	memcpy(ptemp, (void *) p1, size);
+	memcpy((void *) p1, (void *) p2, size);
+	memcpy((void *) p2, ptemp, size);
+	free(ptemp);
+}
