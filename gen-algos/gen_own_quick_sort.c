@@ -52,13 +52,37 @@ void own_quick_sort(int a[], int n) {
 	own_quick_sort_helper(a, 0, n - 1);
 }
 
+int gen_partition(void *base, int l, int h, int size, int (*cmp)(const void *, const void *)) {
+    gen_swap(base + h * size, base + (l + rand() % (h - l + 1)) * size, size);
+    void *pivot = base + h * size;
+    int i = l, j;
+    for (j = l; j < h; j++) {
+        if (cmp(pivot, base + j * size)) {
+            gen_swap(base + i++ * size, base + j * size, size);
+        }
+    }
+    gen_swap(base + h * size, base + i * size, size);
+    return i;
+}
+
+void gen_own_quick_sort_helper(void *base, int l, int h, int size, int (*cmp)(const void *, const void *)) {
+    if (l >= h) return;
+    int p = gen_partition(base, l, h, size, cmp);
+    gen_own_quick_sort_helper(base, l, p - 1, size, cmp);
+    gen_own_quick_sort_helper(base, p + 1, h, size, cmp);
+}
+
+void gen_own_quick_sort(void *base, int n, int size, int (*cmp)(const void *, const void *)) {
+    gen_own_quick_sort_helper(base, 0, n - 1, size, cmp);
+}
+
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
 		printf("wrong usage\n");
 		return 1;
 	}
 
-	printf("brute result: %d\n", brute(own_quick_sort));
+	printf("brute result: %d\n", gen_brute(gen_own_quick_sort));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -70,7 +94,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	own_quick_sort(a, n);
+	gen_own_quick_sort(a, n, sizeof(int), cmp_int);
 	t2 = clock();
 
 	printf("correct: %d\n", check(a, n));

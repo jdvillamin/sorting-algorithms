@@ -37,13 +37,40 @@ void heap_sort(int a[], int n) {
 	}
 }
 
+void gen_percolate_down(void *base, int n, int i, int size, int (*cmp)(const void *, const void *)) {
+    int left, right;
+    while (2 * i + 1 < n) {
+        left = 2 * i + 1, right = 2 * i + 2;
+        if (cmp(base + left * size, base + i * size) && (right >= n || cmp(base + left * size, base + right * size))) {
+            gen_swap(base + i * size, base + left * size, size);
+            i = left;
+        } else if (right < n && cmp(base + right * size, base + i * size)) {
+            gen_swap(base + i * size, base + right * size, size);
+            i = right;
+        } else
+            break;
+    }
+}
+
+void gen_heap_sort(void *base, int n, int size, int (*cmp)(const void *, const void *)) {
+    int i;
+    for (i = (n - 2) / 2; i >= 0; i--)
+        gen_percolate_down(base, n, i, size, cmp);
+
+    int last = n;
+    for (i = 0; i < n - 1; i++) {
+        gen_swap(base + 0 * size, base + --last * size, size);
+        gen_percolate_down(base, last, 0, size, cmp);
+    }
+}
+
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
 		printf("wrong usage\n");
 		return 1;
 	}
 
-	printf("brute result: %d\n", brute(heap_sort));
+	printf("brute result: %d\n", gen_brute(gen_heap_sort));
 
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -55,7 +82,7 @@ int main(int argc, char *argv[]) {
 	init(a, n, mode, seed);
 
 	t1 = clock();
-	heap_sort(a, n);
+	gen_heap_sort(a, n, sizeof(int), cmp_int);
 	t2 = clock();
 	
 	printf("correct: %d\n", check(a, n));
