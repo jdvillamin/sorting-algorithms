@@ -1,53 +1,84 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Function to plot data for a single algorithm
-def plot_algorithm(sheet_data, algorithm_name):
-    """Plots all input cases for a single algorithm from a combined sheet."""
-    # Filter data for the specified algorithm
-    data = sheet_data[sheet_data['algorithm'] == algorithm_name]
-    
-    if data.empty:
-        print(f"No data for {algorithm_name}.")
-        return
-    
-    # Plot the data
+# load excel file
+file_path = 'clean_data.xlsx'  
+df = pd.read_excel(file_path)
+
+# split "Gen" and "Non-Gen"
+gen_algorithms = df[df['algorithm'].str.contains('Gen', case=False, na=False)]
+non_gen_algorithms = df[~df['algorithm'].str.contains('Gen', case=False, na=False)]
+
+# plot all input cases for a single algorithm
+def plot_algorithm_comparison(algorithm_name):
     plt.figure(figsize=(10, 6))
-    input_cases = data['input case'].unique()
     
-    for case in input_cases:
-        case_data = data[data['input case'] == case]
-        plt.plot(
-            case_data['input size'],
-            case_data['average'],
-            marker='o',
-            linestyle='-',
-            label=case,
-            alpha=0.8
-        )
+    # filter data for the algorithm
+    algorithm_data = df[df['algorithm'] == algorithm_name]
     
-    plt.title(f"{algorithm_name} Runtime Comparison", fontsize=16)
-    plt.xlabel("Input Size", fontsize=14)
-    plt.ylabel("Runtime (ms)", fontsize=14)
-    plt.legend(title="Input Cases", fontsize=12)
-    plt.grid(True, linestyle='--', alpha=0.6)
-    plt.tight_layout()
+    # plot each input case
+    unique_cases = algorithm_data['input case'].unique()
+    for case in unique_cases:
+        case_data = algorithm_data[algorithm_data['input case'] == case]
+        if not case_data.empty:
+            plt.plot(case_data['input size'], case_data['average'], marker='o', label=case)
+    
+    # labels
+    plt.title(f'{algorithm_name} Runtime Comparison', fontsize=14)
+    plt.xlabel('Number of Inputs', fontsize=12)
+    plt.ylabel('Runtime (ms)', fontsize=12)
+    plt.legend(title='Input Case')
+    plt.grid(True)
+    plt.show()
+
+# plot all algorithms for single input case
+def plot_input_case_comparison(input_case, category='both'):
+    plt.figure(figsize=(10, 6))
+    
+    # filter data for input case
+    if category == 'gen':
+        case_data = gen_algorithms[gen_algorithms['input case'] == input_case]
+        title_prefix = 'Gen Algorithms'
+    elif category == 'non-gen':
+        case_data = non_gen_algorithms[non_gen_algorithms['input case'] == input_case]
+        title_prefix = 'Non-Gen Algorithms'
+    else:
+        case_data = df[df['input case'] == input_case]
+        title_prefix = 'All Algorithms'
+    
+    unique_algorithms = case_data['algorithm'].unique()
+    for algorithm in unique_algorithms:
+        algorithm_data = case_data[case_data['algorithm'] == algorithm]
+        if not algorithm_data.empty:
+            plt.plot(algorithm_data['input size'], algorithm_data['average'], marker='o', label=algorithm)
+    
+    # labels
+    plt.title(f'{title_prefix} Comparison for {input_case}', fontsize=14)
+    plt.xlabel('Number of Inputs', fontsize=12)
+    plt.ylabel('Runtime (ms)', fontsize=12)
+    plt.legend(title='Algorithm')
+    plt.grid(True)
     plt.show()
 
 
-sheet_data = pd.read_excel("cleaned_data.xlsx", sheet_name="Sheet1")
+plot_algorithm_comparison('Insertion')
+plot_algorithm_comparison('Bubble')
+plot_algorithm_comparison('Selection')
+plot_algorithm_comparison('Shell')
+plot_algorithm_comparison('Merge')
+plot_algorithm_comparison('Heap')
+plot_algorithm_comparison('BIQuick')
+plot_algorithm_comparison('OwnQuick')
+plot_algorithm_comparison('Gen Quick')
+plot_algorithm_comparison('Gen Heap')
+plot_algorithm_comparison('Gen Merge')
+plot_algorithm_comparison('Gen Shell')
+plot_algorithm_comparison('Gen Selection')
+plot_algorithm_comparison('Gen Bubble')
+plot_algorithm_comparison('Gen Insertion')
 
-plot_algorithm(sheet_data, "Insertion")
-plot_algorithm(sheet_data, "Bubble")
-plot_algorithm(sheet_data, "Selection")
-plot_algorithm(sheet_data, "Shell")
-plot_algorithm(sheet_data, "Merge")
-plot_algorithm(sheet_data, "Quick")
-plot_algorithm(sheet_data, "Heap")
-plot_algorithm(sheet_data, "Gen Insertion")
-plot_algorithm(sheet_data, "Gen Bubble")
-plot_algorithm(sheet_data, "Gen Selection")
-plot_algorithm(sheet_data, "Gen Shell")
-plot_algorithm(sheet_data, "Gen Merge")
-plot_algorithm(sheet_data, "Gen Quick")
-plot_algorithm(sheet_data, "Gen Heap")
+
+
+plot_input_case_comparison('Ascending', category='gen')  
+plot_input_case_comparison('Ascending', category='non-gen')  
+plot_input_case_comparison('Ascending', category='both')  
