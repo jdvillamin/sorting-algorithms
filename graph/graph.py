@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import os
 
 # Ensure the output folder exists
-output_folder = 'graphs'
+output_folder = 'graphs2'
 os.makedirs(output_folder, exist_ok=True)
 
 # load excel file
-file_path = 'clean_data.xlsx'  
+file_path = 'clean_data2.xlsx'  
 df = pd.read_excel(file_path)
 
 # split "Gen" and "Non-Gen"
@@ -79,9 +79,9 @@ plot_algorithm_comparison('Selection')
 plot_algorithm_comparison('Shell')
 plot_algorithm_comparison('Merge')
 plot_algorithm_comparison('Heap')
-plot_algorithm_comparison('BIQuick')
-plot_algorithm_comparison('OwnQuick')
-plot_algorithm_comparison('Gen Quick')
+plot_algorithm_comparison('Built-in Quick')
+plot_algorithm_comparison('Own Quick')
+plot_algorithm_comparison('Gen Own Quick')
 plot_algorithm_comparison('Gen Heap')
 plot_algorithm_comparison('Gen Merge')
 plot_algorithm_comparison('Gen Shell')
@@ -93,4 +93,4 @@ plot_input_case_comparison('Ascending', category='gen')
 plot_input_case_comparison('Ascending', category='non-gen')  
 plot_input_case_comparison('Ascending', category='both')
 
-print("All graphs have been saved in the 'graphs' folder.")
+
