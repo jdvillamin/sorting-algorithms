@@ -1,5 +1,10 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
+
+# Ensure the output folder exists
+output_folder = 'graphs'
+os.makedirs(output_folder, exist_ok=True)
 
 # load excel file
 file_path = 'clean_data.xlsx'  
@@ -29,7 +34,11 @@ def plot_algorithm_comparison(algorithm_name):
     plt.ylabel('Runtime (ms)', fontsize=12)
     plt.legend(title='Input Case')
     plt.grid(True)
-    plt.show()
+    
+    # Save the plot
+    file_name = os.path.join(output_folder, f"{algorithm_name}_runtime_comparison.png")
+    plt.savefig(file_name, dpi=300)
+    plt.close()
 
 # plot all algorithms for single input case
 def plot_input_case_comparison(input_case, category='both'):
@@ -58,7 +67,11 @@ def plot_input_case_comparison(input_case, category='both'):
     plt.ylabel('Runtime (ms)', fontsize=12)
     plt.legend(title='Algorithm')
     plt.grid(True)
-    plt.show()
+    
+    # Save the plot
+    file_name = os.path.join(output_folder, f"{title_prefix.replace(' ', '_')}_{input_case}_comparison.png")
+    plt.savefig(file_name, dpi=300)
+    plt.close()
 
 plot_algorithm_comparison('Insertion')
 plot_algorithm_comparison('Bubble')
@@ -78,4 +91,6 @@ plot_algorithm_comparison('Gen Insertion')
 
 plot_input_case_comparison('Ascending', category='gen')  
 plot_input_case_comparison('Ascending', category='non-gen')  
-plot_input_case_comparison('Ascending', category='both')  
+plot_input_case_comparison('Ascending', category='both')
+
+print("All graphs have been saved in the 'graphs' folder.")
