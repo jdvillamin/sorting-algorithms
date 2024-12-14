@@ -60,7 +60,6 @@ def plot_input_case_comparison(input_case, category='both'):
     plt.grid(True)
     plt.show()
 
-
 plot_algorithm_comparison('Insertion')
 plot_algorithm_comparison('Bubble')
 plot_algorithm_comparison('Selection')
@@ -76,8 +75,6 @@ plot_algorithm_comparison('Gen Shell')
 plot_algorithm_comparison('Gen Selection')
 plot_algorithm_comparison('Gen Bubble')
 plot_algorithm_comparison('Gen Insertion')
-
-
 
 plot_input_case_comparison('Ascending', category='gen')  
 plot_input_case_comparison('Ascending', category='non-gen')  

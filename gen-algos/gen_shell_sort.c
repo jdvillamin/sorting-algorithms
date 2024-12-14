@@ -5,22 +5,6 @@
 #include "../lib/utils.h"
 #include "../lib/brute.h"
 
-/*
- * Use insertion sort, but preprocess with larger gaps.
- * Note that gap = 1 means normal insertion sort.
- * But due to preprocessing before gap = 1, we reduce the number of iterations of this normal insertion sort.
- * This is to take inversion pairs that are very far from each other.
- */
-void shell_sort(int a[], int n) {
-	for (int gap = n / 2; gap > 0; gap /= 2)
-		for (int i = gap; i < n; i++)
-			for (int j = i; j >= gap; j -= gap)
-				if (a[j] < a[j - gap])
-					swap(&a[j], &a[j - gap]);
-				else
-					break;
-}
-
 void gen_shell_sort(void *base, int n, int size, int (*cmp)(const void *, const void *)) {
 	for (int gap = n / 2; gap > 0; gap /= 2)
 		for (int i = gap; i < n; i++)
@@ -33,15 +17,18 @@ void gen_shell_sort(void *base, int n, int size, int (*cmp)(const void *, const 
 
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
-		printf("wrong usage\n");
-		return 1;
+		fprintf(stderr, "Usage: <array size> <asc|desc|rand> [<seed>]\n");
+		exit(1);
 	}
 
-	printf("brute result: %d\n", gen_brute(gen_shell_sort));
-
+	if (!gen_brute(gen_shell_sort)) {
+		fprintf(stderr, "Failed brute force verification\n");
+		exit(1);
+	}
+	
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
-	int seed = (argc > 3) ? atoi(argv[3]) : 0;
+	int seed = (argc == 4) ? atoi(argv[3]) : 0;
 
 	int a[n];
 	clock_t t1, t2;
@@ -52,8 +39,11 @@ int main(int argc, char *argv[]) {
 	gen_shell_sort(a, n, sizeof(int), cmp_int);
 	t2 = clock();
 
-	printf("correct: %d\n", check(a, n));
-	printf("time elapsed: %0.6f\n", (double) (t2 - t1) / CLOCKS_PER_SEC);
+	if (!check(a, n)) {
+		fprintf(stderr, "Failed main input case check\n");
+		exit(1);
+	}
 
+	printf("%0.6f ", (double) (t2 - t1) / CLOCKS_PER_SEC);
 	return 0;
 }

@@ -15,9 +15,20 @@ The `algos` directory contains the C source codes for each sorting algorithm:
 - `selection_sort.c`
 - `shell_sort.c`
 - `heap_sort.c`
+- `merge_sort.c`
 - `own_quick_sort.c`
 - `hoare_quick_sort.c`
 - `built_in_quick_sort.c`
+
+The `gen-algos` directory contains the C source codes for each sorting algorithm but for generic data type:
+
+- `gen_bubble_sort.c`
+- `gen_insertion_sort.c`
+- `gen_selection_sort.c`
+- `gen_shell_sort.c`
+- `gen_heap_sort.c`
+- `gen_merge_sort.c`
+- `gen_own_quick_sort.c`
 
 ### Library
 

@@ -30,6 +30,17 @@ int partition(int a[], int l, int h) {
 	return j;
 }
 
+void insertion_sort(int a[], int n) {
+	int i, j;
+
+	for (i = 1; i < n; i++)
+		for (j = i; j > 0; j--)
+			if (a[j - 1] > a[j])
+				swap(&a[j - 1], &a[j]);
+			else 
+				break;
+}
+
 /*
  * Quick sort:
  * Suppose we want to sort the array from l to h (exclusive).
@@ -44,6 +55,8 @@ int partition(int a[], int l, int h) {
  */
 void hoare_quick_sort_helper(int a[], int l, int h) {
 	if (l >= h) return;
+    if (h - l <= 15)
+        insertion_sort(a + l, h - l + 1);
 	int p = partition(a, l, h);
 	hoare_quick_sort_helper(a, l, p - 1);
 	hoare_quick_sort_helper(a, p + 1, h);

@@ -5,57 +5,6 @@
 #include "../lib/utils.h"
 #include "../lib/brute.h"
 
-/*
- * [                        ]
- * 
- * [sorted][    unsorted    ]
- *
- * We insert elements from the unsorted part to the sorted part.
- *
- * We build the sorted part expanding from left to right.
- *
- * [  sorted  ][  unsorted  ]
- *
- * [         sorted         ]
- *
- * 3 1 4 2 5 6 0 8 7
- *
- * [3] 1 4 2 5 6 0 8 7
- *
- * We can pick the first element in the unsorted part.
- *
- * Swap it with the element to its left until we get swap it to the correct position.
- *
- * This takes advantage of the fact that the sorted part is sorted.
- *
- * [1] 3 4 2 5 6 0 8 7
- *
- * [1 3] 4 2 5 6 0 8 7
- *
- * [1 3 4] 2 5 6 0 8 7
- *
- * [1 3 2] 4 5 6 0 8 7
- *
- * [1 2 3 4] 5 6 0 8 7
- *
- * [1 2 3 4 5 6] 0 8 7
- *
- * [1 2 3 4 5 0] 6 8 7
- *
- * [1 2 3 4 0 5] 6 8 7
- *
- * [1 2 3 0 4 5] 6 8 7
- *
- * ...
- * 
- * [0 1 2 3 4 5 6] 8 7
- *
- * [0 1 2 3 4 5 6 8] 7
- *
- * [0 1 2 3 4 5 6 7 8]
- * 
- * The insertion point must be the right most position such that the previos element is less than or equal to the inserted element.
- */
 void insertion_sort(int a[], int n) {
 	int i, j;
 
@@ -69,11 +18,14 @@ void insertion_sort(int a[], int n) {
 
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
-		printf("wrong usage\n");
-		return 1;
+		fprintf(stderr, "Usage: <array size> <asc|desc|rand> [<seed>]\n");
+		exit(1);
 	}
 	
-	printf("brute result: %d\n", brute(insertion_sort));
+	if (!brute(insertion_sort)) {
+        fprintf(stderr, "Failed brute force verification\n");
+        exit(1);
+    }
 	
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
@@ -83,13 +35,16 @@ int main(int argc, char *argv[]) {
 	clock_t t1, t2;
 
 	init(a, n, mode, seed);
-
-	t1 = clock();
+	
+    t1 = clock();
 	insertion_sort(a, n);
 	t2 = clock();
 
-	printf("correct: %d\n", check(a, n));
-	printf("time elapsed: %0.6f\n", (double) (t2 - t1) / CLOCKS_PER_SEC);
-
+	if (!check(a, n)) {
+        fprintf(stderr, "Failed main input case check\n");
+        exit(1);
+    }
+    
+	printf("%0.6f ", (double) (t2 - t1) / CLOCKS_PER_SEC);
 	return 0;
 }

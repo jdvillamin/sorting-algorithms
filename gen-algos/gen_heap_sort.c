@@ -5,38 +5,6 @@
 #include "../lib/utils.h"
 #include "../lib/brute.h"
 
-void percolate_down(int a[], int n, int i) {
-	// while left child exists, percolate down while it is possible
-	int left, right;
-	while (2 * i + 1 < n) {
-		left = 2 * i + 1, right = 2 * i + 2;
-		if (a[i] < a[left] && (right >= n || a[left] > a[right])) {
-			swap(&a[i], &a[left]);
-			i = left;
-		} else if (right < n && a[i] < a[right]) {
-			swap(&a[i], &a[right]);
-			i = right;
-		} else
-			break;
-	}
-}
-
-void heap_sort(int a[], int n) {
-	// i is mapped to 2i + 1 and 2i + 2
-	// so, parent(i) = (i - 1) / 2
-	int i;
-	for (i = (n - 2) / 2; i >= 0; i--)
-		percolate_down(a, n, i);
-	
-	// keep deleting maximum
-	int last = n;
-	for (i = 0; i < n - 1; i++) {
-		// max is at a[0]
-		swap(&a[0], &a[--last]);
-		percolate_down(a, last, 0);
-	}
-}
-
 void gen_percolate_down(void *base, int n, int i, int size, int (*cmp)(const void *, const void *)) {
     int left, right;
     while (2 * i + 1 < n) {
@@ -66,15 +34,18 @@ void gen_heap_sort(void *base, int n, int size, int (*cmp)(const void *, const v
 
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
-		printf("wrong usage\n");
-		return 1;
+		fprintf(stderr, "Usage: <array size> <asc|desc|rand> [<seed>]\n");
+		exit(1);
 	}
 
-	printf("brute result: %d\n", gen_brute(gen_heap_sort));
-
+	if (!gen_brute(gen_heap_sort)) {
+		fprintf(stderr, "Failed brute force verification\n");
+		exit(1);
+	}
+	
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
-	int seed = (argc > 3) ? atoi(argv[3]) : 0;
+	int seed = (argc == 4) ? atoi(argv[3]) : 0;
 
 	int a[n];
 	clock_t t1, t2;
@@ -84,9 +55,12 @@ int main(int argc, char *argv[]) {
 	t1 = clock();
 	gen_heap_sort(a, n, sizeof(int), cmp_int);
 	t2 = clock();
-	
-	printf("correct: %d\n", check(a, n));
-	printf("time elapsed: %0.6f\n", (double) (t2 - t1) / CLOCKS_PER_SEC);
-	
+
+	if (!check(a, n)) {
+		fprintf(stderr, "Failed main input case check\n");
+		exit(1);
+	}
+
+	printf("%0.6f ", (double) (t2 - t1) / CLOCKS_PER_SEC);
 	return 0;
 }

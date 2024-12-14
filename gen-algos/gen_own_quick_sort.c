@@ -16,41 +16,6 @@
  * i keeps track of the last element in the prefix.
  * j moves to swap elements less than pivot to the last element of the prefix.
  */
-int partition(int a[], int l, int h) {
-	swap(&a[h], &a[l + rand() % (h - l + 1)]);
-	int pivot = a[h], i = l, j;
-	for (j = l; j < h; j++) {
-		if (a[j] < pivot) {
-			swap(&a[i], &a[j]);
-			i++;
-		}
-	}
-	swap(&a[h], &a[i]);
-	return i;
-}
-
-/*
- * Quick sort:
- * Suppose we want to sort the array from l to h (exclusive).
- * We want to pick a partition element a[p] (l <= p < h).
- * We want to find where a[p] is supposed to be in the subrange.
- * We can do this by placing all elements less then a[p] to the left of a[p],
- * and all elements greater than or equal to a[p] to the right of a[p].
- * After that, recurse to the subranges (l, p) and (p + 1, h).
- * If we keep the partitioning algorithm to be O(h - l),
- * then by Master's theorem, our algorithm will be O(n log n)
- * if we get lucky with the partitioning element that it halves the subranges.
- */
-void own_quick_sort_helper(int a[], int l, int h) {
-	if (l >= h) return;
-	int p = partition(a, l, h);
-	own_quick_sort_helper(a, l, p - 1);
-	own_quick_sort_helper(a, p + 1, h);
-}
-
-void own_quick_sort(int a[], int n) {
-	own_quick_sort_helper(a, 0, n - 1);
-}
 
 int gen_partition(void *base, int l, int h, int size, int (*cmp)(const void *, const void *)) {
     gen_swap(base + h * size, base + (l + rand() % (h - l + 1)) * size, size);
@@ -65,6 +30,18 @@ int gen_partition(void *base, int l, int h, int size, int (*cmp)(const void *, c
     return i;
 }
 
+/*
+ * Quick sort:
+ * Suppose we want to sort the array from l to h (exclusive).
+ * We want to pick a partition element a[p] (l <= p < h).
+ * We want to find where a[p] is supposed to be in the subrange.
+ * We can do this by placing all elements less then a[p] to the left of a[p],
+ * and all elements greater than or equal to a[p] to the right of a[p].
+ * After that, recurse to the subranges (l, p) and (p + 1, h).
+ * If we keep the partitioning algorithm to be O(h - l),
+ * then by Master's theorem, our algorithm will be O(n log n)
+ * if we get lucky with the partitioning element that it halves the subranges.
+ */
 void gen_own_quick_sort_helper(void *base, int l, int h, int size, int (*cmp)(const void *, const void *)) {
     if (l >= h) return;
     int p = gen_partition(base, l, h, size, cmp);
@@ -78,15 +55,18 @@ void gen_own_quick_sort(void *base, int n, int size, int (*cmp)(const void *, co
 
 int main(int argc, char *argv[]) {
 	if (argc < 3) {
-		printf("wrong usage\n");
-		return 1;
+		fprintf(stderr, "Usage: <array size> <asc|desc|rand> [<seed>]\n");
+		exit(1);
 	}
 
-	printf("brute result: %d\n", gen_brute(gen_own_quick_sort));
-
+	if (!gen_brute(gen_own_quick_sort)) {
+		fprintf(stderr, "Failed brute force verification\n");
+		exit(1);
+	}
+	
 	int n = atoi(argv[1]);
 	const char *mode = argv[2];
-	int seed = (argc > 3) ? atoi(argv[3]) : 0;
+	int seed = (argc == 4) ? atoi(argv[3]) : 0;
 
 	int a[n];
 	clock_t t1, t2;
@@ -97,8 +77,11 @@ int main(int argc, char *argv[]) {
 	gen_own_quick_sort(a, n, sizeof(int), cmp_int);
 	t2 = clock();
 
-	printf("correct: %d\n", check(a, n));
-	printf("time elapsed: %0.6f\n", (double) (t2 - t1) / CLOCKS_PER_SEC);
+	if (!check(a, n)) {
+		fprintf(stderr, "Failed main input case check\n");
+		exit(1);
+	}
 
+	printf("%0.6f ", (double) (t2 - t1) / CLOCKS_PER_SEC);
 	return 0;
 }
